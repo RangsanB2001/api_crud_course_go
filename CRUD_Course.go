@@ -35,7 +35,8 @@ func SetupDB() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(db)
+	// fmt.Println(db)
+	fmt.Println("Connected")
 	db.SetConnMaxLifetime(time.Minute * 3)
 	db.SetMaxOpenConns(10)
 	db.SetMaxIdleConns(10)

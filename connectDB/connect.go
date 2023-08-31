@@ -21,4 +21,9 @@ func ConnectDB() {
 	}
 	// Migrate the schema
 	Db.AutoMigrate(&user.Student{})
+	err = Db.AutoMigrate(&user.Course{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
 }

@@ -6,3 +6,9 @@ type AuthRegister struct {
 	FullName   string `json:"fullname" binding:"required"`
 	ImgProfile string `json:"imgprofile" binding:"required"`
 }
+
+type Course struct {
+	Coursename string  `json:"coursename"`
+	Price      float64 `json:"price"`
+	ImageURL   string  `json:"imageurl"`
+}

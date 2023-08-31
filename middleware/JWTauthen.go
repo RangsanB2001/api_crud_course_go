@@ -14,7 +14,7 @@ func JWTauthen() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		hmacSampleSecret := []byte(os.Getenv("JWT_SECRET_KEY"))
 		header := c.Request.Header.Get("Authorization")
-		tokenString := strings.Replace(header, "Bearer", " ", 1)
+		tokenString := strings.Replace(header, "Bearer ", "", 1) // แก้ไขตรงนี้
 		// Parse the token
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -23,15 +23,23 @@ func JWTauthen() gin.HandlerFunc {
 			return hmacSampleSecret, nil
 		})
 		//check token login
+		if err != nil {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{ // แก้ไขตรงนี้
+				"status":  "error",
+				"message": "Invalid token",
+			})
+			return
+		}
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 			// Set example variable
 			c.Set("studentId", claims["studentId"])
 
 		} else {
-			c.AbortWithStatusJSON(http.StatusOK, gin.H{
-				"status":  "ineligible",
-				"message": err.Error(),
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{ // แก้ไขตรงนี้
+				"status":  "error",
+				"message": "Invalid token",
 			})
+			return
 		}
 
 		// before request
